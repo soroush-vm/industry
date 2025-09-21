@@ -1,17 +1,17 @@
 <template>
   <q-page class="bg-page flex flex-center">
     <div class="honeycomb">
-      <div
-        v-for="(cell, index) in cells"
-        :key="index"
-        class="hex"
-        ref="hexRefs"
-      >
-        <div class="hex-content">
-          <p>{{ cell.text }}</p>
+        <div
+          v-for="(cell, index) in cells"
+          :key="index"
+          class="hex"
+          ref="hexRefs"
+        >
+          <div class="hex-content">
+            <p>{{ cell.text }}</p>
+          </div>
         </div>
       </div>
-    </div>
   </q-page>
 </template>
 
@@ -19,14 +19,8 @@
 import { ref, onMounted, nextTick } from "vue";
 import gsap from "gsap";
 
-const cells = [
-  { text: "Cell 1" },
-  { text: "Cell 2" },
-  { text: "Cell 3" },
-  { text: "Cell 4" },
-  { text: "Cell 5" },
-  { text: "Cell 6" },
-];
+// generate 48 cells
+const cells = Array.from({ length: 48 }, (_, i) => ({ text: `Cell ${i + 1}` }));
 
 const hexRefs = ref([]);
 
@@ -62,15 +56,22 @@ onMounted(async () => {
 }
 
 .honeycomb {
+  /* make the honeycomb fill the full viewport area and split into a fixed total of 48 cells
+     using different column/row counts for breakpoints so cells always fill the page */
+  height: 100vh;
+  width: 100vw;
   display: grid;
-  grid-template-columns: repeat(3, 120px);
-  grid-gap: 10px;
+  gap: 8px;
+  /* default (mobile): 4 columns x 12 rows = 48 */
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  box-sizing: border-box;
 }
 
 .hex {
-  width: 120px;
-  height: 104px;
-  background: rgba(255, 215, 0, 0.1);
+  /* let each hex fill its grid cell */
+  width: 100%;
+  height: 100%;
   clip-path: polygon(
     50% 0%,
     93% 25%,
@@ -83,7 +84,9 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 1px solid gold;
+  box-sizing: border-box;
+  background: rgba(117, 50, 224, 0.2); /* رنگ جدید */
+  border: 5px solid rgba(164, 192, 8, 0.6); /* رنگ خط دور */
 }
 
 .hex-content {
@@ -91,5 +94,21 @@ onMounted(async () => {
   font-size: 14px;
   color: white;
   padding: 5px;
+}
+
+/* medium screens: 6 columns x 8 rows */
+@media (min-width: 600px) {
+  .honeycomb {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+  }
+}
+
+/* large screens: 8 columns x 6 rows */
+@media (min-width: 1000px) {
+  .honeycomb {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
 }
 </style>

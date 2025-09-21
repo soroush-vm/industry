@@ -1,12 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated class="app-header">
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> Essential Links </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -18,7 +17,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="app-container">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -30,46 +29,22 @@ import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
+    title: 'About us',
+    caption: 'everything about company',
+    icon: 'apple',
+    link: 'https://google.com',
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
+    title: 'Admins',
+    caption: 'this panel is for admins',
     icon: 'code',
-    link: 'https://github.com/quasarframework',
+    link: 'https://google.com',
   },
   {
     title: 'Discord Chat Channel',
     caption: 'chat.quasar.dev',
     icon: 'chat',
     link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
   },
 ]
 
@@ -79,3 +54,21 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
+<style scoped>
+.app-header {
+  /* background with reduced opacity: change the color and alpha as needed */
+  background-color: rgba(3, 3, 34, 0.9); /* semi-transparent black */
+  color: #ffffff; /* ensure toolbar text/icons are readable */
+}
+
+/* If Quasar applies its own backdrop or box-shadow via the elevated prop, reduce it slightly */
+.app-header.q-elevated {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.app-container {
+  /* background with reduced opacity: change the color and alpha as needed */
+  background-color: rgba(3, 3, 34, 0.9); /* semi-transparent black */
+  color: #ffffff; /* ensure toolbar text/icons are readable */
+}
+</style>
