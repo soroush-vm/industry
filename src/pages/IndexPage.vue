@@ -50,26 +50,28 @@ onMounted(async () => {
 
 <style scoped>
 .bg-page {
-  background: url("/backGround.jpg") no-repeat center center fixed;
-  background-size: cover;
+  /* تغییر بک‌گراند */
+  background: linear-gradient(135deg, #9464c7, #17376d); /* مثال گرادینت */
+  /* یا رنگ ساده: background-color: #1a1a1a; */
   min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* جلوگیری از اسکرول */
 }
 
 .honeycomb {
-  /* make the honeycomb fill the full viewport area and split into a fixed total of 48 cells
-     using different column/row counts for breakpoints so cells always fill the page */
-  height: 100vh;
-  width: 100vw;
   display: grid;
   gap: 8px;
-  /* default (mobile): 4 columns x 12 rows = 48 */
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(12, 1fr);
   box-sizing: border-box;
+
+  /* موبایل: 4 ستون × 12 ردیف */
+  grid-template-columns: repeat(4, calc((100vw - 3*8px)/4));
+  grid-template-rows: repeat(12, calc((100vh - 11*8px)/12));
 }
 
 .hex {
-  /* let each hex fill its grid cell */
   width: 100%;
   height: 100%;
   clip-path: polygon(
@@ -85,30 +87,30 @@ onMounted(async () => {
   justify-content: center;
   cursor: pointer;
   box-sizing: border-box;
-  background: rgba(117, 50, 224, 0.2); /* رنگ جدید */
-  border: 5px solid rgba(164, 192, 8, 0.6); /* رنگ خط دور */
+  background: rgba(27, 7, 58, 0.4); /* رنگ پس‌زمینه */
+  border: 3px solid rgba(164, 192, 8, 0.8); /* رنگ خط دور */
 }
 
 .hex-content {
   text-align: center;
-  font-size: 14px;
+  font-size: clamp(10px, 1vw, 14px); /* اندازه واکنش‌گرا */
   color: white;
   padding: 5px;
 }
 
-/* medium screens: 6 columns x 8 rows */
+/* تبلت: 6 ستون × 8 ردیف */
 @media (min-width: 600px) {
   .honeycomb {
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(8, 1fr);
+    grid-template-columns: repeat(6, calc((100vw - 5*8px)/6));
+    grid-template-rows: repeat(8, calc((100vh - 7*8px)/8));
   }
 }
 
-/* large screens: 8 columns x 6 rows */
+/* دسکتاپ: 8 ستون × 6 ردیف */
 @media (min-width: 1000px) {
   .honeycomb {
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(8, calc((100vw - 7*8px)/8));
+    grid-template-rows: repeat(6, calc((100vh - 5*8px)/6));
   }
 }
 </style>
