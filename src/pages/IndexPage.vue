@@ -6,6 +6,7 @@
           :key="index"
           class="hex"
           ref="hexRefs"
+          @click="goToSolar(cell.text)"
         >
           <div class="hex-content">
             <p>{{ cell.text }}</p>
@@ -17,7 +18,16 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
+import { useRouter } from "vue-router"
 import gsap from "gsap";
+const router = useRouter()
+const goToSolar = (cellText) => {
+  // اگر پارامتر داری
+  router.push({ name: "solar", params: { cell: cellText } })
+
+  // اگر بدون پارامتر می‌خوای
+  // router.push({ name: "solar" })
+}
 
 // generate 48 cells
 const cells = Array.from({ length: 48 }, (_, i) => ({ text: `Cell ${i + 1}` }));
