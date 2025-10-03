@@ -2,7 +2,7 @@
   <q-page class="bg-page flex flex-center">
     <!-- نود مرکزی -->
     <div class="center-node" ref="centerRef">
-      📦 دسته‌ها
+      سامانه جامع
     </div>
 
     <!-- نودهای دسته‌ها -->
@@ -12,6 +12,8 @@
       class="node"
       :style="getNodeStyle(i, rootCategories.length)"
       ref="nodeRefs"
+      @mouseenter="hoverIn(i)"
+      @mouseleave="hoverOut(i)"
       @click="onNodeClick(cat, i)"
     >
       {{ cat }}
@@ -28,7 +30,7 @@ const router = useRouter();
 const rootCategories = [
   "صنایع", "کشاورزی", "فناوری", "خدمات", "سلامت",
   "آموزش", "فرهنگ", "ورزش", "گردشگری", "حمل‌ونقل",
-  "ساختمان", "انرژی", "محیط‌زیست", "مدیریت", "مالی",
+  "ساختمان", "انرژی", "محیط‌ زیست", "مدیریت", "مالی",
   "حقوق", "ارتباطات", "رسانه", "بازرگانی"
 ];
 
@@ -36,7 +38,7 @@ const centerRef = ref(null);
 const nodeRefs = ref([]);
 
 // فاصله شعاعی نودها
-const radius = 400;
+const radius = 300;
 
 const getNodeStyle = (i, total) => {
   const angle = (i / total) * 2 * Math.PI;
@@ -45,6 +47,15 @@ const getNodeStyle = (i, total) => {
 
   return { transform: `translate(${x}px, ${y}px)` };
 };
+
+const hoverIn = (i) => {
+  gsap.to(nodeRefs.value[i], { scale: 1.2, duration: 0.3, ease: "power2.out" });
+};
+
+const hoverOut = (i) => {
+  gsap.to(nodeRefs.value[i], { scale: 1, duration: 0.3, ease: "power2.out" });
+};
+
 
 // وقتی روی نود کلیک شد
 const onNodeClick = (cat) => {
@@ -67,7 +78,7 @@ const onNodeClick = (cat) => {
       rotation: randRot,
       scale: randScale,
       opacity: 0,
-      duration: 0.8,
+      duration: 2,
       ease: "power2.in"
     }, 0); // همه با هم شروع میشن
   });
@@ -115,7 +126,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  color: #222;
+  color: #222222;
   z-index: 10;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
@@ -125,13 +136,13 @@ onMounted(async () => {
   width: 100px;
   height: 100px;
   clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-  background: #58a8f3;
+  background: #121861;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: bold;
-  color: white;
+  color: rgb(170, 190, 137);
   text-align: center;
   padding: 5px;
   cursor: pointer;
@@ -141,6 +152,6 @@ onMounted(async () => {
 
 .node:hover {
   transform: scale(1.1) translateY(-3px);
-  box-shadow: 0 0 12px rgba(88, 168, 243, 0.9);
+  box-shadow: 0 0 12px rgba(189, 223, 37, 0.9);
 }
 </style>
