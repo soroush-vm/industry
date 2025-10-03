@@ -93,7 +93,11 @@ onMounted(async () => {
 <style scoped>
 .bg-page {
   background: linear-gradient(135deg, #9464c7, #17376d);
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;

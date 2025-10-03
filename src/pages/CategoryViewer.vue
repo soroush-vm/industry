@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <component :is="currentComponent" :segments="segments" />
   </q-page>
 </template>
