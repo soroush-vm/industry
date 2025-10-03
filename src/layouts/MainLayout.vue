@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          🛒 سیستم دسته‌بندی محصولات
+          سامانه جامع
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
