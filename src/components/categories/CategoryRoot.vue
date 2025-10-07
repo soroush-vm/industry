@@ -1,22 +1,19 @@
 <template>
-  <q-page class="bg-page flex flex-center">
-    <!-- نود مرکزی -->
-    <div class="center-node" ref="centerRef">
-      سامانه جامع
-    </div>
-
-    <!-- نودهای دسته‌ها -->
-    <div
-      v-for="(cat, i) in rootCategories"
-      :key="i"
-      class="node"
-      :style="getNodeStyle(i, rootCategories.length)"
-      ref="nodeRefs"
-      @mouseenter="hoverIn(i)"
-      @mouseleave="hoverOut(i)"
-      @click="onNodeClick(cat, i)"
-    >
-      {{ cat }}
+  <q-page class="bg-page">
+    <div class="grid-wrapper">
+      <div
+        v-for="(cell, index) in cells"
+        :key="index"
+        class="rect-wrapper"
+        ref="hexRefs"
+        @click="goToCategory(cell.category, index)"
+      >
+        <div class="rectangle">
+          <div class="rect-content">
+            <p>{{ cell.text }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -27,131 +24,130 @@ import { useRouter } from "vue-router";
 import gsap from "gsap";
 
 const router = useRouter();
-const rootCategories = [
-  "صنایع", "کشاورزی", "فناوری", "خدمات", "سلامت",
-  "آموزش", "فرهنگ", "ورزش", "گردشگری", "حمل‌ونقل",
-  "ساختمان", "انرژی", "محیط‌ زیست", "مدیریت", "مالی",
-  "حقوق", "ارتباطات", "رسانه", "بازرگانی"
-];
 
-const centerRef = ref(null);
-const nodeRefs = ref([]);
+// داده‌های گرید با 13 سلول
+const cells = ref(
+  Array.from({ length: 13 }, (_, i) => ({
+    text: `Cell ${i + 1}`,
+    category: `category-${i + 1}`,
+  }))
+);
+const hexRefs = ref([]);
 
-// فاصله شعاعی نودها
-const radius = 300;
-
-const getNodeStyle = (i, total) => {
-  const angle = (i / total) * 2 * Math.PI;
-  const x = Math.cos(angle) * radius;
-  const y = Math.sin(angle) * radius;
-
-  return { transform: `translate(${x}px, ${y}px)` };
-};
-
-const hoverIn = (i) => {
-  gsap.to(nodeRefs.value[i], { scale: 1.2, duration: 0.3, ease: "power2.out" });
-};
-
-const hoverOut = (i) => {
-  gsap.to(nodeRefs.value[i], { scale: 1, duration: 0.3, ease: "power2.out" });
-};
-
-
-// وقتی روی نود کلیک شد
-const onNodeClick = (cat) => {
-  // انیمیشن خروج نامنظم
-  const timeline = gsap.timeline({
-    onComplete: () => {
-      router.push({ name: "Categories", params: { pathMatch: [cat] } });
-    }
-  });
-
-  nodeRefs.value.forEach((node) => {
-    const randX = (Math.random() - 0.5) * 800; // پراکندگی X
-    const randY = (Math.random() - 0.5) * 800; // پراکندگی Y
-    const randRot = (Math.random() - 0.5) * 720; // چرخش نامنظم
-    const randScale = Math.random() * 0.8 + 0.2;
-
-    timeline.to(node, {
-      x: randX,
-      y: randY,
-      rotation: randRot,
-      scale: randScale,
-      opacity: 0,
-      duration: 2,
-      ease: "power2.in"
-    }, 0); // همه با هم شروع میشن
-  });
-
-  // مرکز هم میره
-  timeline.to(centerRef.value, {
-    scale: 0,
+// تابع کلیک برای انتقال به مسیر Categories با انیمیشن نابودی
+const goToCategory = (cat, index) => {
+  const el = hexRefs.value[index];
+  gsap.to(el, {
     opacity: 0,
+    scale: 0.5,
+    rotate: 180,
     duration: 0.5,
-    ease: "power2.in"
-  }, 0);
+    ease: "power2.in",
+    onComplete: () => {
+      cells.value.splice(index, 1);
+      router.push({ name: "Categories", params: { pathMatch: cat } });
+    },
+  });
 };
 
 onMounted(async () => {
   await nextTick();
 
-  // انیمیشن ورود
-  gsap.fromTo(centerRef.value, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)" });
-  gsap.fromTo(nodeRefs.value, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.1, duration: 0.6, ease: "back.out(1.7)" });
+  // Hover animation
+  hexRefs.value.forEach((el) => {
+    el.addEventListener("mouseenter", () => {
+      gsap.to(el, { scale: 1.05, duration: 0.3, ease: "power2.out" });
+    });
+    el.addEventListener("mouseleave", () => {
+      gsap.to(el, { scale: 1, duration: 0.3, ease: "power2.out" });
+    });
+  });
+
+  // Entrance animation
+  gsap.from(hexRefs.value, {
+    opacity: 0,
+    y: 40,
+    stagger: 0.05,
+    duration: 0.6,
+    ease: "power2.out",
+  });
 });
 </script>
 
 <style scoped>
+/* 🟣 پس‌زمینه صفحه */
 .bg-page {
   background: linear-gradient(135deg, #9464c7, #17376d);
-  width: 100vw;
   height: 100vh;
-  min-height: 100vh;
+  width: 100vw;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
-  position: relative;
 }
 
-.center-node {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-  background: #ffb703;
+/* 🟡 گرید تمام‌صفحه */
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  gap: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🟢 باکس اصلی برای نگهداری شکل */
+.rect-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform-origin: center;
+}
+
+/* 🔶 خود مستطیل */
+.rectangle {
+  width: 100%;
+  height: 100%;
+  background: rgba(27, 7, 58, 0.4);
+  border: 1px solid rgba(164, 192, 8, 0.8);
+  transform: none;
+  transform-origin: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: #222222;
-  z-index: 10;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-}
-
-.node {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-  background: #121861;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: bold;
-  color: rgb(170, 190, 137);
-  text-align: center;
-  padding: 5px;
   cursor: pointer;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  border-radius: 4px;
 }
 
-.node:hover {
-  transform: scale(1.1) translateY(-3px);
-  box-shadow: 0 0 12px rgba(189, 223, 37, 0.9);
+/* ✨ محتوا */
+.rect-content {
+  color: white;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px;
 }
-</style>
+
+/* 📱 واکنش‌گرا */
+@media (min-width: 600px) {
+  .grid-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  }
+  .rect-content {
+    font-size: 16px;
+  }
+}
+@media (min-width: 1000px) {
+  .grid-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  }
+  .rect-content {
+    font-size: 18px;
+  }
+}
+</style>  

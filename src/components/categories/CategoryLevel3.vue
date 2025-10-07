@@ -5,6 +5,7 @@
         v-for="(cell, index) in cells"
         :key="index"
         class="para-wrapper"
+        @click="onNodeClick(sub)"
         ref="hexRefs"
       >
         <div class="parallelogram">
@@ -19,7 +20,12 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
+import { useRouter } from "vue-router";
 import gsap from "gsap";
+const router = useRouter();
+const centerRef = ref(null);
+const nodeRefs = ref([]);
+
 
 // داده‌های گرید
 const cells = Array.from({ length: 48 }, (_, i) => ({ text: `Cell ${i + 1}` }));
@@ -52,6 +58,47 @@ onMounted(async () => {
     ease: "power2.out",
   });
 });
+
+// کلیک روی نود → مرحله بعد
+const onNodeClick = (sub) => {
+  const tl = gsap.timeline({
+    onComplete: () => {
+          router.push({
+          name: "categoryDetail",
+          params: { id: sub },
+        });
+    },
+  });
+  animateExit(tl);
+};
+// تابع مشترک انیمیشن خروج
+const animateExit = (tl) => {
+  nodeRefs.value.forEach((node, i) => {
+    const angle = (i / nodeRefs.value.length) * Math.PI * 2;
+    const spiralX = Math.cos(angle) * (800 + Math.random() * 200);
+    const spiralY = Math.sin(angle) * (800 + Math.random() * 200);
+    const rot = 720 + Math.random() * 360;
+
+    tl.to(node, {
+      x: spiralX,
+      y: spiralY,
+      rotation: rot,
+      scale: 0,
+      opacity: 0,
+      duration: 1,
+      ease: "power4.inOut",
+    }, 0);
+  });
+
+  tl.to(centerRef.value, {
+    scale: 0,
+    rotation: 180,
+    opacity: 0,
+    duration: 0.7,
+    ease: "power4.inOut",
+  }, 0.1);
+};
+
 </script>
 
 <style scoped>

@@ -8,8 +8,15 @@ const routes = [
       {
         path: 'categories/:pathMatch(.*)*',
         name: 'Categories',
-        component: () => import('pages/CategoryViewer.vue')
-      }
+        component: () => import('pages/CategoryViewer.vue'),
+          children: [
+            {
+              path: 'detail/:id',
+              name: 'categoryDetail',
+              component: () => import('pages/DetailComponent.vue')
+            }
+          ]
+      },
     ]
   },
   {
