@@ -5,8 +5,8 @@
         v-for="(cell, index) in cells"
         :key="index"
         class="para-wrapper"
-        @click="onNodeClick(sub)"
-        ref="hexRefs"
+        @click="onNodeClick(index + 1)"
+        ref="setHexRef"
       >
         <div class="parallelogram">
           <div class="para-content">
@@ -22,24 +22,27 @@
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import gsap from "gsap";
+
 const router = useRouter();
-const centerRef = ref(null);
-const nodeRefs = ref([]);
 
+// 🔹 گرید سلول‌ها
+const cells = Array.from({ length: 48 }, (_, i) => ({
+  text: `Cell ${i + 1}`,
+}));
 
-// داده‌های گرید
-const cells = Array.from({ length: 48 }, (_, i) => ({ text: `Cell ${i + 1}` }));
+// 🔹 آرایه‌ی ref برای انیمیشن
 const hexRefs = ref([]);
 
-// // تابع کلیک (میتونی مسیر دلخواه خودت رو بذاری)
-// const goToSolar = (text) => {
-//   console.log("Clicked:", text);
-// };
+// تابع ثبت رفرنس‌ها (به‌جای ref مستقیم در v-for)
+const setHexRef = (el) => {
+  if (el) hexRefs.value.push(el);
+};
 
+// 🟣 انیمیشن‌ها بعد از mount
 onMounted(async () => {
   await nextTick();
 
-  // Hover animation
+  // انیمیشن hover
   hexRefs.value.forEach((el) => {
     el.addEventListener("mouseenter", () => {
       gsap.to(el, { scale: 1.1, duration: 0.3, ease: "power2.out" });
@@ -49,7 +52,7 @@ onMounted(async () => {
     });
   });
 
-  // Entrance animation
+  // انیمیشن ورود اولیه
   gsap.from(hexRefs.value, {
     opacity: 0,
     y: 40,
@@ -59,46 +62,42 @@ onMounted(async () => {
   });
 });
 
-// کلیک روی نود → مرحله بعد
-const onNodeClick = (sub) => {
+// 🟢 کلیک روی سلول → اجرای انیمیشن خروج و رفتن به صفحه جزئیات
+const onNodeClick = (id) => {
   const tl = gsap.timeline({
     onComplete: () => {
-          router.push({
-          name: "categoryDetail",
-          params: { id: sub },
-        });
+      router.push({
+        name: "categoryDetail",
+        params: { id },
+      });
     },
   });
   animateExit(tl);
 };
-// تابع مشترک انیمیشن خروج
+
+// 🔄 انیمیشن خروج کل سلول‌ها
 const animateExit = (tl) => {
-  nodeRefs.value.forEach((node, i) => {
-    const angle = (i / nodeRefs.value.length) * Math.PI * 2;
+  hexRefs.value.forEach((node, i) => {
+    const angle = (i / hexRefs.value.length) * Math.PI * 2;
     const spiralX = Math.cos(angle) * (800 + Math.random() * 200);
     const spiralY = Math.sin(angle) * (800 + Math.random() * 200);
     const rot = 720 + Math.random() * 360;
 
-    tl.to(node, {
-      x: spiralX,
-      y: spiralY,
-      rotation: rot,
-      scale: 0,
-      opacity: 0,
-      duration: 1,
-      ease: "power4.inOut",
-    }, 0);
+    tl.to(
+      node,
+      {
+        x: spiralX,
+        y: spiralY,
+        rotation: rot,
+        scale: 0,
+        opacity: 0,
+        duration: 1,
+        ease: "power4.inOut",
+      },
+      0
+    );
   });
-
-  tl.to(centerRef.value, {
-    scale: 0,
-    rotation: 180,
-    opacity: 0,
-    duration: 0.7,
-    ease: "power4.inOut",
-  }, 0.1);
 };
-
 </script>
 
 <style scoped>
