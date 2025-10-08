@@ -44,6 +44,9 @@ const subCategories = [
   "ترشبجات",
 ];
 
+// دکمه بازگشت → مرحله قبل
+
+
 // فاصله شعاعی نودها
 const radius = 350;
 
@@ -116,6 +119,7 @@ onMounted(async () => {
     { scale: 1, opacity: 1, stagger: 0.1, duration: 0.6, ease: "back.out(1.7)" }
   );
 });
+
 </script>
 
 <style scoped>

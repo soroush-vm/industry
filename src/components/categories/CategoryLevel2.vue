@@ -11,7 +11,7 @@
 
     <!-- نود مرکزی -->
     <div class="center-node" ref="centerRef">
-      {{ segments[1] }}
+      <img src="/src/assets/layer1.png" alt="مرحله اول" class="center-img" ref="centerImg" />
     </div>
 
     <!-- نودهای زیر دسته -->
@@ -41,6 +41,7 @@ const segments = props.segments;
 const router = useRouter();
 const nodeRefs = ref([]);
 const centerRef = ref(null);
+const centerImg = ref(null);
 
 const subCategories = ["الف", "ب", "پ", "ت", "ث", "ج", "چ", "ح"];
 const radius = 300;
@@ -64,11 +65,22 @@ const hoverOut = (i) => {
 // انیمیشن ورود
 onMounted(async () => {
   await nextTick();
-
-  gsap.fromTo(centerRef.value,
-    { scale: 0, opacity: 0, y: -100 },
-    { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: "elastic.out(1, 0.6)" }
+  gsap.fromTo(centerImg.value,
+  { scale: 0, opacity: 0, rotation: -180 },
+  { scale: 1, opacity: 1, rotation: 0, duration: 1, ease: "elastic.out(1, 0.6)" }
   );
+
+  // gsap.fromTo(centerRef.value,
+  //   { scale: 0, opacity: 0, y: -100 },
+  //   { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: "elastic.out(1, 0.6)" }
+  // );
+  gsap.to(centerImg.value, {
+    scale: 1.1,
+    repeat: -1,
+    yoyo: true,
+    duration: 1.5,
+    ease: "sine.inOut"
+  });
 
   gsap.fromTo(nodeRefs.value,
     { scale: 0, opacity: 0, rotation: 180 },
@@ -159,7 +171,7 @@ const animateExit = (tl) => {
   z-index: 50;
 }
 
-.center-node {
+/* .center-node {
   position: absolute;
   width: 140px;
   height: 140px;
@@ -174,6 +186,25 @@ const animateExit = (tl) => {
   box-shadow: 0 0 14px rgba(255, 179, 0, 0.4);
   padding: 10px;
   z-index: 10;
+} */
+
+.center-node {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* اگه بخوای دایره بشه */
+  overflow: hidden;
+  background: transparent; /* چون حالا از تصویر استفاده می‌کنی */
+  box-shadow: 0 0 14px rgba(255, 179, 0, 0.4);
+}
+
+.center-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .node {
