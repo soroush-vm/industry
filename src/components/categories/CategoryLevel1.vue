@@ -1,5 +1,11 @@
 <template>
   <q-page class="bg-page flex flex-center">
+    <q-btn
+      label="بازگشت 🔙"
+      color="amber"
+      class="back-btn"
+      @click="goBack"
+    />
     <!-- نود مرکزی -->
     <div class="center-node" ref="centerRef">
       مرحله اول
@@ -45,6 +51,17 @@ const subCategories = [
 ];
 
 // دکمه بازگشت → مرحله قبل
+const goBack = () => {
+  const tl = gsap.timeline({
+    onComplete: () => {
+      router.push({
+        name: "Categories",
+      });
+    },
+  });
+
+  animateExit(tl);
+};
 
 
 // فاصله شعاعی نودها
@@ -120,6 +137,34 @@ onMounted(async () => {
   );
 });
 
+// تابع مشترک انیمیشن خروج
+const animateExit = (tl) => {
+  nodeRefs.value.forEach((node, i) => {
+    const angle = (i / nodeRefs.value.length) * Math.PI * 2;
+    const spiralX = Math.cos(angle) * (800 + Math.random() * 200);
+    const spiralY = Math.sin(angle) * (800 + Math.random() * 200);
+    const rot = 720 + Math.random() * 360;
+
+    tl.to(node, {
+      x: spiralX,
+      y: spiralY,
+      rotation: rot,
+      scale: 0,
+      opacity: 0,
+      duration: 1,
+      ease: "power4.inOut",
+    }, 0);
+  });
+
+  tl.to(centerRef.value, {
+    scale: 0,
+    rotation: 180,
+    opacity: 0,
+    duration: 0.7,
+    ease: "power4.inOut",
+  }, 0.1);
+};
+
 </script>
 
 <style scoped>
@@ -150,6 +195,14 @@ onMounted(async () => {
   padding: 10px;
   z-index: 10;
 }
+
+.back-btn {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 50;
+}
+
 
 .node {
   position: absolute;

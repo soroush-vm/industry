@@ -25,16 +25,22 @@ import gsap from "gsap";
 
 const router = useRouter();
 
-// داده‌های گرید با 13 سلول
-const cells = ref(
-  Array.from({ length: 13 }, (_, i) => ({
-    text: `Cell ${i + 1}`,
-    category: `category-${i + 1}`,
-  }))
-);
+// ✅ ۹ عنوان واقعی برای گرید
+const cells = ref([
+  { text: "ابرسامانه صنعت و تولید ایران", category: "industry" },
+  { text: "ابرسامانه تجارت و بازرگانی", category: "commerce" },
+  { text: "ابرسامانه اصناف و خدمات شهری", category: "services" },
+  { text: "ابرسامانه کشاورزی و امنیت غذایی", category: "agriculture" },
+  { text: "ابرسامانه گردشگری و میراث فرهنگی", category: "tourism" },
+  { text: "ابرسامانه سلامت و رفاه اجتماعی", category: "health" },
+  { text: "ابرسامانه معدن و منابع طبیعی", category: "mining" },
+  { text: "ابرسامانه نفت، انرژی و محیط زیست", category: "energy" },
+  { text: "ابرسامانه دانش، فناوری و سرمایه انسانی", category: "knowledge" },
+]);
+
 const hexRefs = ref([]);
 
-// تابع کلیک برای انتقال به مسیر Categories با انیمیشن نابودی
+// انیمیشن کلیک و انتقال به صفحه‌ی دسته
 const goToCategory = (cat, index) => {
   const el = hexRefs.value[index];
   gsap.to(el, {
@@ -53,7 +59,7 @@ const goToCategory = (cat, index) => {
 onMounted(async () => {
   await nextTick();
 
-  // Hover animation
+  // انیمیشن hover
   hexRefs.value.forEach((el) => {
     el.addEventListener("mouseenter", () => {
       gsap.to(el, { scale: 1.05, duration: 0.3, ease: "power2.out" });
@@ -63,7 +69,7 @@ onMounted(async () => {
     });
   });
 
-  // Entrance animation
+  // انیمیشن ورود
   gsap.from(hexRefs.value, {
     opacity: 0,
     y: 40,
@@ -75,30 +81,34 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 🟣 پس‌زمینه صفحه */
+/* 🟣 پس‌زمینه */
 .bg-page {
   background: linear-gradient(135deg, #9464c7, #17376d);
   height: 100vh;
   width: 100vw;
   margin: 0;
-  padding: 0;
+  padding: 12px;
+  box-sizing: border-box;
   overflow: hidden;
+
+  /* مرکز کردن گرید */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* 🟡 گرید تمام‌صفحه */
+/* 🟡 گرید ۳×۳ */
 .grid-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
-  gap: 0;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 30px;
+  width: 90%;
+  height: 90%;
   box-sizing: border-box;
 }
 
-/* 🟢 باکس اصلی برای نگهداری شکل */
+/* 🟢 هر سلول */
 .rect-wrapper {
   width: 100%;
   height: 100%;
@@ -106,48 +116,27 @@ onMounted(async () => {
   transform-origin: center;
 }
 
-/* 🔶 خود مستطیل */
+/* 🔶 ظاهر باکس */
 .rectangle {
   width: 100%;
   height: 100%;
   background: rgba(27, 7, 58, 0.4);
   border: 1px solid rgba(164, 192, 8, 0.8);
-  transform: none;
-  transform-origin: center;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-sizing: border-box;
-  border-radius: 4px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
 }
 
-/* ✨ محتوا */
+/* ✨ متن داخل باکس */
 .rect-content {
   color: white;
   text-align: center;
-  font-size: 14px;
+  font-size: 1.1rem;
   font-weight: 500;
-  padding: 8px;
+  padding: 12px;
+  line-height: 1.6;
 }
-
-/* 📱 واکنش‌گرا */
-@media (min-width: 600px) {
-  .grid-wrapper {
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-    grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
-  }
-  .rect-content {
-    font-size: 16px;
-  }
-}
-@media (min-width: 1000px) {
-  .grid-wrapper {
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-    grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
-  }
-  .rect-content {
-    font-size: 18px;
-  }
-}
-</style>  
+</style>

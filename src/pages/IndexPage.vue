@@ -82,7 +82,12 @@ onMounted(() => {
   padding: 40px;
   text-align: center;
   overflow: hidden;
-  background: url('/src/assets/tejarat.png') center center / cover no-repeat;
+  /* background: url('/src/assets/tejarat.png') center center / cover no-repeat; */
+  /* background: url('/src/assets/tejarat.png') center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;  */
+  background: url('/src/assets/tejarat.png') center center / contain no-repeat;
+  background-color: #000; /* رنگ پس‌زمینه در صورت وجود حاشیه */
 }
 
 /* لایه‌ی گرادیانت برای خوانایی بهتر متن */
