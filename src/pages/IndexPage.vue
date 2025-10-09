@@ -1,12 +1,3 @@
-<!-- <template>
-  <q-page padding>
-    <h2>صفحه اصلی</h2>
-    <q-btn label="برو به دسته‌ها" color="primary" to="/categories" />
-  </q-page>
-</template>
-
-<script setup>
-</script> -->
 <template>
   <q-page class="home-page flex flex-center column">
     <!-- عنوان -->
@@ -35,6 +26,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import gsap from "gsap";
+// import bgImage from "../assets/tejarat.png"; // ← تصویر پس‌زمینه
 
 const titleRef = ref(null);
 const textRef = ref(null);
@@ -85,11 +77,28 @@ onMounted(() => {
 
 <style scoped>
 .home-page {
-  background: linear-gradient(135deg, #000428, #004e92);
+  position: relative;
   min-height: 100vh;
   padding: 40px;
   text-align: center;
   overflow: hidden;
+  background: url('/src/assets/tejarat.png') center center / cover no-repeat;
+}
+
+/* لایه‌ی گرادیانت برای خوانایی بهتر متن */
+.home-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 78, 146, 0.5));
+  z-index: 0;
+}
+
+.title,
+.description,
+.go-btn {
+  position: relative;
+  z-index: 1;
 }
 
 .title {
