@@ -9,6 +9,19 @@
       @click="goBack"
     />
 
+    <!-- مسیر فعلی -->
+    <div class="breadcrumb" ref="breadcrumbRef">
+      <span
+        v-for="(seg, i) in segments"
+        :key="i"
+        class="crumb"
+      >
+        {{ seg }}
+        <span v-if="i < segments.length - 1" class="arrow">→</span>
+      </span>
+    </div>
+
+
     <!-- نود مرکزی -->
     <div class="center-node" ref="centerRef">
       <img src="/src/assets/layer1.png" alt="مرحله اول" class="center-img" ref="centerImg" />
@@ -42,6 +55,8 @@ const router = useRouter();
 const nodeRefs = ref([]);
 const centerRef = ref(null);
 const centerImg = ref(null);
+const breadcrumbRef = ref(null);
+
 
 const subCategories = ["الف", "ب", "پ", "ت", "ث", "ج", "چ", "ح"];
 const radius = 300;
@@ -93,6 +108,17 @@ onMounted(async () => {
       ease: "back.out(1.8)",
     }
   );
+  // انیمیشن ورود breadcrumb
+  gsap.fromTo(breadcrumbRef.value,
+    { opacity: 0, y: -30, scale: 0.8 },
+    { opacity: 1, y: 0, scale: 1, duration: 1, ease: "back.out(1.7)" }
+  );
+
+  gsap.fromTo(".crumb",
+    { opacity: 0, x: 30 },
+    { opacity: 1, x: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }
+  );
+
 });
 
 // کلیک روی نود → مرحله بعد
@@ -226,6 +252,38 @@ const animateExit = (tl) => {
   transform: var(--node-translate) scale(1);
   transition: box-shadow 0.3s ease;
 }
+
+.breadcrumb {
+  position: absolute;
+  top: 25px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  padding: 6px 16px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  z-index: 60;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.arrow {
+  margin: 0 6px;
+  color: #ffb300;
+  font-weight: bold;
+}
+
 
 .node:hover {
   box-shadow: 0 0 16px rgba(103, 58, 183, 0.9);

@@ -51,7 +51,6 @@ const loadCategories = async () => {
   }
 };
 
-// 🎯 وقتی صفحه لود شد
 onMounted(async () => {
   await loadCategories();
   await nextTick();
@@ -66,7 +65,6 @@ onMounted(async () => {
     });
   });
 
-  // انیمیشن ورود
   gsap.from(hexRefs.value, {
     opacity: 0,
     y: 40,
