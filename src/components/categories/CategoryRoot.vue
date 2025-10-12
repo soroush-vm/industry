@@ -8,7 +8,7 @@
         ref="hexRefs"
         @click="goToCategory(cell.category, index)"
       >
-        <div class="rectangle">
+        <div class="rectangle" :style="{ backgroundColor: cell.color || 'rgba(27, 7, 58, 0.4)' }">
           <div class="rect-content">
             <p>{{ cell.text }}</p>
           </div>
@@ -21,26 +21,13 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
+import { api } from "boot/axios"; 
 import gsap from "gsap";
 
 const router = useRouter();
-
-// ✅ ۹ عنوان واقعی برای گرید
-const cells = ref([
-  { text: "ابرسامانه صنعت و تولید ایران", category: "industry" },
-  { text: "ابرسامانه تجارت و بازرگانی", category: "commerce" },
-  { text: "ابرسامانه اصناف و خدمات شهری", category: "services" },
-  { text: "ابرسامانه کشاورزی و امنیت غذایی", category: "agriculture" },
-  { text: "ابرسامانه گردشگری و میراث فرهنگی", category: "tourism" },
-  { text: "ابرسامانه سلامت و رفاه اجتماعی", category: "health" },
-  { text: "ابرسامانه معدن و منابع طبیعی", category: "mining" },
-  { text: "ابرسامانه نفت، انرژی و محیط زیست", category: "energy" },
-  { text: "ابرسامانه دانش، فناوری و سرمایه انسانی", category: "knowledge" },
-]);
-
+const cells = ref([]);
 const hexRefs = ref([]);
 
-// انیمیشن کلیک و انتقال به صفحه‌ی دسته
 const goToCategory = (cat, index) => {
   const el = hexRefs.value[index];
   gsap.to(el, {
@@ -50,13 +37,23 @@ const goToCategory = (cat, index) => {
     duration: 0.5,
     ease: "power2.in",
     onComplete: () => {
-      cells.value.splice(index, 1);
       router.push({ name: "Categories", params: { pathMatch: cat } });
     },
   });
 };
 
+const loadCategories = async () => {
+  try {
+    const { data } = await api.get("/categories");
+    cells.value = data; // ✅ داده‌ها رو از بک‌اند ست می‌کنیم
+  } catch (err) {
+    console.error("خطا در گرفتن داده از بک‌اند:", err);
+  }
+};
+
+// 🎯 وقتی صفحه لود شد
 onMounted(async () => {
+  await loadCategories();
   await nextTick();
 
   // انیمیشن hover
@@ -81,23 +78,17 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 🟣 پس‌زمینه */
 .bg-page {
   background: linear-gradient(135deg, #9464c7, #17376d);
   height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 12px;
-  box-sizing: border-box;
-  overflow: hidden;
-
-  /* مرکز کردن گرید */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* 🟡 گرید ۳×۳ */
 .grid-wrapper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -105,10 +96,8 @@ onMounted(async () => {
   gap: 30px;
   width: 90%;
   height: 90%;
-  box-sizing: border-box;
 }
 
-/* 🟢 هر سلول */
 .rect-wrapper {
   width: 100%;
   height: 100%;
@@ -116,11 +105,9 @@ onMounted(async () => {
   transform-origin: center;
 }
 
-/* 🔶 ظاهر باکس */
 .rectangle {
   width: 100%;
   height: 100%;
-  background: rgba(27, 7, 58, 0.4);
   border: 1px solid rgba(164, 192, 8, 0.8);
   display: flex;
   align-items: center;
@@ -130,7 +117,6 @@ onMounted(async () => {
   transition: transform 0.3s ease;
 }
 
-/* ✨ متن داخل باکس */
 .rect-content {
   color: white;
   text-align: center;

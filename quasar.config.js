@@ -90,9 +90,17 @@ export default defineConfig((ctx) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
-      // https: true,
-      open: true, // opens browser window automatically
+      open: true, // مرورگر رو بعد از اجرا باز کن
+      proxy: {
+        '/api': {
+          target: 'http://localhost:5007', // آدرس backend
+          changeOrigin: true,
+          secure: false,
+          rewrite: path => path.replace(/^\/api/, '/api')
+        }
+      }
     },
+
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
     framework: {
