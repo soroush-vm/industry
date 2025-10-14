@@ -7,8 +7,16 @@
       @click="goBack"
     />
     <!-- نود مرکزی -->
-    <div class="center-node" ref="centerRef">
+    <!-- <div class="center-node" ref="centerRef">
       مرحله اول
+    </div> -->
+
+    <!-- نود مرکزی -->
+    <!-- <div class="center-node" ref="centerRef">
+      <img src="/src/assets/gardeshgari.png" alt="مرحله اول" class="center-img" ref="centerImg" />
+    </div> -->
+    <div class="center-node" ref="centerRef">
+      <img src="/src/assets/gardeshgari.png" alt="مرحله اول" class="center-img" />
     </div>
 
     <!-- نودهای زیر دسته -->
@@ -38,6 +46,8 @@ const segments = props.segments;
 const router = useRouter();
 const nodeRefs = ref([]);
 const centerRef = ref(null);
+// const centerImg = ref(null);
+
 
 const subCategories = [
   "لبنی",
@@ -126,6 +136,23 @@ const onNodeClick = (sub) => {
 onMounted(async () => {
   await nextTick();
 
+  // gsap.fromTo(centerImg.value,
+  // { scale: 0, opacity: 0, rotation: -180 },
+  // { scale: 1, opacity: 1, rotation: 0, duration: 1, ease: "elastic.out(1, 0.6)" }
+  // );
+
+  // // gsap.fromTo(centerRef.value,
+  // //   { scale: 0, opacity: 0, y: -100 },
+  // //   { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: "elastic.out(1, 0.6)" }
+  // // );
+  // gsap.to(centerImg.value, {
+  //   scale: 1.1,
+  //   repeat: -1,
+  //   yoyo: true,
+  //   duration: 1.5,
+  //   ease: "sine.inOut"
+  // });
+
   gsap.fromTo(centerRef.value,
     { scale: 0, opacity: 0 },
     { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }
@@ -169,7 +196,7 @@ const animateExit = (tl) => {
 
 <style scoped>
 .bg-page {
-  background: linear-gradient(135deg, #000000, #6d011c);
+  background: linear-gradient(5deg, #ffffff, #2c1d21);
   width: 100vw;
   height: 90vh;
   display: flex;
@@ -181,17 +208,14 @@ const animateExit = (tl) => {
 
 .center-node {
   position: absolute;
-  width: 150px;
-  height: 150px;
-  clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-  background: #5dad2f;
+  width: 300px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   text-align: center;
   color: #222;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
   padding: 10px;
   z-index: 10;
 }
@@ -223,6 +247,11 @@ const animateExit = (tl) => {
   transition: box-shadow 0.3s ease;
 
   transform: var(--node-translate) scale(1);
+}
+.center-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* هاور با GSAP انجام میشه، این فقط fallback */

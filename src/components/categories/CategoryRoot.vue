@@ -21,12 +21,22 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
-import { api } from "boot/axios"; 
 import gsap from "gsap";
 
 const router = useRouter();
-const cells = ref([]);
 const hexRefs = ref([]);
+
+// ✅ داده‌های ثابت به جای دریافت از API
+const cells = ref([
+  { text: "ابرسامانه تجارت و بازرگانی", category: "commerce", color: "#17376d" },
+  { text: "ابرسامانه اصناف و خدمات شهری", category: "services", color: "#1d5e8a" },
+  { text: "ابرسامانه کشاورزی و امنیت غذایی", category: "agriculture", color: "#2a7b6f" },
+  { text: "ابرسامانه گردشگری و میراث فرهنگی", category: "tourism", color: "#b36d2d" },
+  { text: "ابرسامانه سلامت و رفاه اجتماعی", category: "health", color: "#8a2e5c" },
+  { text: "ابرسامانه معدن و منابع طبیعی", category: "mining", color: "#5f3a92" },
+  { text: "ابرسامانه نفت، انرژی و محیط زیست", category: "energy", color: "#c94a3d" },
+  { text: "ابرسامانه دانش، فناوری و سرمایه انسانی", category: "knowledge", color: "#1f7a9d" },
+]);
 
 const goToCategory = (cat, index) => {
   const el = hexRefs.value[index];
@@ -42,17 +52,7 @@ const goToCategory = (cat, index) => {
   });
 };
 
-const loadCategories = async () => {
-  try {
-    const { data } = await api.get("/categories");
-    cells.value = data; // ✅ داده‌ها رو از بک‌اند ست می‌کنیم
-  } catch (err) {
-    console.error("خطا در گرفتن داده از بک‌اند:", err);
-  }
-};
-
 onMounted(async () => {
-  await loadCategories();
   await nextTick();
 
   // انیمیشن hover
