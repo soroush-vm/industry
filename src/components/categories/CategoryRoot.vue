@@ -1,5 +1,8 @@
 <template>
   <q-page class="bg-page">
+    <!-- لوگوی الله -->
+    <img class="allah-logo" src="/src/assets/flag.png" alt="logo" />
+
     <div class="grid-wrapper">
       <div
         v-for="(cell, index) in cells"
@@ -8,7 +11,10 @@
         ref="hexRefs"
         @click="goToCategory(cell.category, index)"
       >
-        <div class="rectangle" :style="{ backgroundColor: cell.color || 'rgba(27, 7, 58, 0.4)' }">
+        <div
+          class="rectangle"
+          :style="{ backgroundColor: cell.color || 'rgba(27, 7, 58, 0.4)' }"
+        >
           <div class="rect-content">
             <p>{{ cell.text }}</p>
           </div>
@@ -26,7 +32,6 @@ import gsap from "gsap";
 const router = useRouter();
 const hexRefs = ref([]);
 
-// ✅ داده‌های ثابت به جای دریافت از API
 const cells = ref([
   { text: "ابرسامانه تجارت و بازرگانی", category: "commerce", color: "#17376d" },
   { text: "ابرسامانه اصناف و خدمات شهری", category: "services", color: "#1d5e8a" },
@@ -76,8 +81,11 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* ===== صفحه اصلی با پس‌زمینه و قاب سه‌رنگ ===== */
 .bg-page {
-  background: linear-gradient(135deg, #9464c7, #17376d);
+  position: relative;
+  background: url('/src/assets/back\ ground.png') no-repeat center center fixed;
+  background-size: cover;
   height: 100vh;
   width: 100vw;
   margin: 0;
@@ -85,8 +93,34 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  /* قاب سه رنگ اطراف صفحه */
+  border: 14px solid transparent;
+  border-image: linear-gradient(to bottom, #009639 0%, #ffffff 50%, #da0000 100%) 1;
+  border-radius: 20px;
 }
 
+/* ===== قاب داخلی (درخشش ملایم) ===== */
+.bg-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.25) inset;
+  pointer-events: none;
+}
+
+/* ===== لوگوی الله ===== */
+.allah-logo {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 60px;
+  height: auto;
+  z-index: 5;
+}
+
+/* ===== گرید و سلول‌ها ===== */
 .grid-wrapper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
