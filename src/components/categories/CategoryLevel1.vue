@@ -6,15 +6,6 @@
       class="back-btn"
       @click="goBack"
     />
-    <!-- نود مرکزی -->
-    <!-- <div class="center-node" ref="centerRef">
-      مرحله اول
-    </div> -->
-
-    <!-- نود مرکزی -->
-    <!-- <div class="center-node" ref="centerRef">
-      <img src="/src/assets/gardeshgari.png" alt="مرحله اول" class="center-img" ref="centerImg" />
-    </div> -->
     <div class="center-node" ref="centerRef">
       <img src="/src/assets/gardeshgari.png" alt="مرحله اول" class="center-img" />
     </div>

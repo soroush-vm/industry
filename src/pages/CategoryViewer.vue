@@ -41,8 +41,8 @@ const defaultComponentMap = {
 // 🔹 تعریف Component Map مخصوص سلامت
 const healthComponentMap = {
   0: defineAsyncComponent(() => import("components/categories/CategoryRoot.vue")),
-  1: defineAsyncComponent(() => import("components/categories/CategoryLevel1.vue")),
-  2: defineAsyncComponent(() => import("components/categories/CategoryLevel2.vue")),
+  1: defineAsyncComponent(() => import("components/salamat/CategorySalamatLevel1.vue")),
+  2: defineAsyncComponent(() => import("components/salamat/CategorySalamatLevel2.vue")),
 };
 
 // 🔹 انتخاب داینامیک بر اساس نوع سامانه
