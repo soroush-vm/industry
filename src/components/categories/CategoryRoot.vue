@@ -1,26 +1,44 @@
 <template>
   <q-page class="bg-page">
-    <!-- لوگوی الله -->
-    <img class="allah-logo" src="/src/assets/flag.png" alt="logo" />
+    <!-- لوگوهای دو طرف -->
+    <img class="allah-logo-left" src="/src/assets/flag.png" alt="logo" />
 
-    <div class="grid-wrapper">
-      <div
-        v-for="(cell, index) in cells"
-        :key="index"
-        class="rect-wrapper"
-        ref="hexRefs"
-        @click="goToCategory(cell.category, index)"
-      >
+    <!-- دو بخش چپ و راست -->
+    <div class="main-grid">
+      <!-- بخش چپ -->
+      <div class="half-grid left-grid">
         <div
-          class="rectangle"
-          :style="{ backgroundColor: cell.color || 'rgba(27, 7, 58, 0.4)' }"
+          v-for="(cell, index) in cellLeft"
+          :key="'left-' + index"
+          class="img-wrapper"
+          ref="hexRefs"
+          @click="goToCategory(cell.category, index)"
         >
-          <div class="rect-content">
-            <p>{{ cell.text }}</p>
+          <div class="img-container">
+            <img :src="cell.image" :alt="cell.text" class="category-img" />
           </div>
+          <p class="img-text">{{ cell.text }}</p>
+        </div>
+      </div>
+
+      <!-- بخش راست -->
+      <div class="half-grid right-grid">
+        <div
+          v-for="(cell, index) in cellRight"
+          :key="'right-' + index"
+          class="img-wrapper"
+          ref="hexRefs"
+          @click="goToCategory(cell.category, index)"
+        >
+          <div class="img-container">
+            <img :src="cell.image" :alt="cell.text" class="category-img" />
+          </div>
+          <p class="img-text">{{ cell.text }}</p>
         </div>
       </div>
     </div>
+
+    <img class="allah-logo-right" src="/src/assets/flag.png" alt="logo" />
   </q-page>
 </template>
 
@@ -32,15 +50,22 @@ import gsap from "gsap";
 const router = useRouter();
 const hexRefs = ref([]);
 
-const cells = ref([
-  { text: "ابرسامانه تجارت و بازرگانی", category: "commerce", color: "#17376d" },
-  { text: "ابرسامانه اصناف و خدمات شهری", category: "services", color: "#1d5e8a" },
-  { text: "ابرسامانه کشاورزی و امنیت غذایی", category: "agriculture", color: "#2a7b6f" },
-  { text: "ابرسامانه گردشگری و میراث فرهنگی", category: "tourism", color: "#b36d2d" },
-  { text: "ابرسامانه سلامت و رفاه اجتماعی", category: "health", color: "#8a2e5c" },
-  { text: "ابرسامانه معدن و منابع طبیعی", category: "mining", color: "#5f3a92" },
-  { text: "ابرسامانه نفت، انرژی و محیط زیست", category: "energy", color: "#c94a3d" },
-  { text: "ابرسامانه دانش، فناوری و سرمایه انسانی", category: "knowledge", color: "#1f7a9d" },
+const cellLeft = ref([
+  { text: "مالی", category: "mali", image: "/src/assets/mali.png" },
+  { text: "عمران", category: "omran", image: "/src/assets/omran.png" },
+  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png" },
+  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png" },
+  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png" },
+  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png" },
+]);
+
+const cellRight = ref([
+  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png" },
+  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png" },
+  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png" },
+  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png" },
+  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png" },
+  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png" },
 ]);
 
 const goToCategory = (cat, index) => {
@@ -59,8 +84,6 @@ const goToCategory = (cat, index) => {
 
 onMounted(async () => {
   await nextTick();
-
-  // انیمیشن hover
   hexRefs.value.forEach((el) => {
     el.addEventListener("mouseenter", () => {
       gsap.to(el, { scale: 1.05, duration: 0.3, ease: "power2.out" });
@@ -69,7 +92,6 @@ onMounted(async () => {
       gsap.to(el, { scale: 1, duration: 0.3, ease: "power2.out" });
     });
   });
-
   gsap.from(hexRefs.value, {
     opacity: 0,
     y: 40,
@@ -81,10 +103,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* ===== صفحه اصلی با پس‌زمینه و قاب سه‌رنگ ===== */
+/* ===== پس‌زمینه اصلی ===== */
 .bg-page {
   position: relative;
-  background: url('/src/assets/back\ ground.png') no-repeat center center fixed;
+  background: url('/src/assets/back ground.png') no-repeat center center fixed;
   background-size: cover;
   height: 100vh;
   width: 100vw;
@@ -94,13 +116,11 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  /* قاب سه رنگ اطراف صفحه */
   border: 14px solid transparent;
   border-image: linear-gradient(to bottom, #009639 0%, #ffffff 50%, #da0000 100%) 1;
   border-radius: 20px;
 }
 
-/* ===== قاب داخلی (درخشش ملایم) ===== */
 .bg-page::before {
   content: "";
   position: absolute;
@@ -109,52 +129,67 @@ onMounted(async () => {
   pointer-events: none;
 }
 
-/* ===== لوگوی الله ===== */
-.allah-logo {
+/* ===== لوگوها ===== */
+.allah-logo-left,
+.allah-logo-right {
   position: absolute;
   top: 50%;
-  left: 0;
   transform: translateY(-50%);
   width: 60px;
   height: auto;
   z-index: 5;
 }
+.allah-logo-left { left: 0; }
+.allah-logo-right { right: 0; }
 
-/* ===== گرید و سلول‌ها ===== */
-.grid-wrapper {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 30px;
+/* ===== ساختار کلی دو بخش ===== */
+.main-grid {
+  display: flex;
   width: 90%;
   height: 90%;
-}
-
-.rect-wrapper {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  transform-origin: center;
-}
-
-.rectangle {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(164, 192, 8, 0.8);
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  gap: 30px;
+}
+
+/* ===== هر نیمه ===== */
+.half-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  justify-items: center;
+  align-items: center;
+}
+
+/* ===== تصویر و متن ===== */
+.img-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
-  border-radius: 8px;
   transition: transform 0.3s ease;
 }
 
-.rect-content {
-  color: white;
+.img-container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.img-text {
+  color: black;
   text-align: center;
-  font-size: 1.1rem;
+  margin-top: 8px;
+  font-size: 1rem;
   font-weight: 500;
-  padding: 12px;
-  line-height: 1.6;
 }
 </style>
