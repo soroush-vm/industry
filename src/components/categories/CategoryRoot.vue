@@ -1,10 +1,9 @@
 <template>
   <q-page class="bg-page">
-    <!-- لوگوهای دو طرف -->
+    <!-- لوگوی وسط -->
     <img class="center-logo" src="/src/assets/logo-main.png" alt="center logo" />
-    <img class="allah-logo-left" src="/src/assets/flag.png" alt="logo" />
 
-    <!-- دو بخش چپ و راست -->
+    <!-- ساختار دو بخش چپ و راست -->
     <div class="main-grid">
       <!-- بخش چپ -->
       <div class="half-grid left-grid">
@@ -21,6 +20,7 @@
           <p class="img-text">{{ cell.text }}</p>
         </div>
       </div>
+
       <!-- بخش راست -->
       <div class="half-grid right-grid">
         <div
@@ -37,8 +37,6 @@
         </div>
       </div>
     </div>
-
-    <img class="allah-logo-right" src="/src/assets/flag.png" alt="logo" />
   </q-page>
 </template>
 
@@ -68,7 +66,7 @@ const cellRight = ref([
   { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png" },
 ]);
 
-// ✅ اصلاح شده: جبران ایندکس برای آیتم‌های سمت راست
+// انیمیشن کلیک
 const goToCategory = (cat, index, isRight = false) => {
   const actualIndex = isRight ? index + cellLeft.value.length : index;
   const el = hexRefs.value[actualIndex];
@@ -76,7 +74,7 @@ const goToCategory = (cat, index, isRight = false) => {
 
   gsap.to(el, {
     opacity: 0,
-    scale: 0.5,
+    scale: 1,
     rotate: 180,
     duration: 0.5,
     ease: "power2.in",
@@ -89,7 +87,7 @@ const goToCategory = (cat, index, isRight = false) => {
 onMounted(async () => {
   await nextTick();
 
-  // انیمیشن Hover
+  // انیمیشن hover
   hexRefs.value.forEach((el) => {
     el.addEventListener("mouseenter", () => {
       gsap.to(el, { scale: 1.05, duration: 0.3, ease: "power2.out" });
@@ -99,15 +97,15 @@ onMounted(async () => {
     });
   });
 
-    gsap.from(".center-logo", {
+  // انیمیشن لوگو
+  gsap.from(".center-logo", {
     opacity: 0,
     scale: 0.7,
     duration: 0.8,
     ease: "back.out(1.7)",
   });
 
-
-  // انیمیشن ورود
+  // انیمیشن ورود آیتم‌ها
   gsap.from(hexRefs.value, {
     opacity: 0,
     y: 40,
@@ -117,8 +115,9 @@ onMounted(async () => {
   });
 });
 </script>
+
 <style scoped>
-/* ===== پس‌زمینه اصلی ===== */
+/* ===== پس‌زمینه ===== */
 .bg-page {
   position: relative;
   background: url('/src/assets/back ground.png') no-repeat center center fixed;
@@ -136,19 +135,6 @@ onMounted(async () => {
   border-radius: 20px;
 }
 
-.center-logo {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -30%);
-  width: 200px; /* اندازه دلخواه */
-  height: auto;
-  z-index: 8; /* بالاتر از بک‌گراند ولی زیر border */
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
-  pointer-events: none; /* باعث میشه کلیک‌ها به بقیه عناصر برسن */
-}
-
-
 .bg-page::before {
   content: "";
   position: absolute;
@@ -157,45 +143,33 @@ onMounted(async () => {
   pointer-events: none;
 }
 
-.allah-logo-left,
-.allah-logo-right {
-  position: absolute;
+.center-logo {
+  position: fixed;
   top: 50%;
-  transform: translateY(-50%);
-  border-radius: 10px;
-  width: 60px;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  width: 200px;
   height: auto;
-  z-index: 10;
+  z-index: 8;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+  pointer-events: none;
 }
 
-/* حرکت دادن لوگو روی بردر چپ */
-.allah-logo-left {
-  left: 0;
-  transform: translate(-20%, -20%); /* لوگو میاد روی بردر بیرونی */
-}
-
-/* حرکت دادن لوگو روی بردر راست */
-.allah-logo-right {
-  right: 0;
-  transform: translate(20%, -20%);
-}
-
-
-/* ===== ساختار کلی دو بخش ===== */
+/* ===== ساختار کلی ===== */
 .main-grid {
   display: flex;
   width: 90%;
   height: 60%;
   justify-content: space-between;
   align-items: center;
-  gap: 300px;
+  gap: 250px; /* کمتر شد برای سه‌تایی */
 }
 
-/* ===== هر نیمه ===== */
+/* ===== چیدمان هر نیمه ===== */
 .half-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* ✅ سه‌تایی */
   gap: 10px;
   justify-items: center;
   align-items: center;
@@ -211,8 +185,8 @@ onMounted(async () => {
 }
 
 .img-container {
-  width: 200px;
-  height: 200px;
+  width: 150px; /* کمی کوچک‌تر شد */
+  height: 150px;
   overflow: hidden;
   border-radius: 16px;
 }
@@ -221,70 +195,14 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  transition: transform 1s ease;
 }
 
 .img-text {
   color: black;
   text-align: center;
-  margin-top: 8px;
-  font-size: 1rem;
-  font-weight: 500;
+  margin-top: 4px;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
-
-@media (max-width: 768px) {
-  .bg-page {
-    height: auto; /* چون اسکرول می‌خواهیم، ارتفاع ثابت نمی‌خوایم */
-    width: 100%;
-    padding: 16px;
-    overflow-y: auto; /* فعال شدن اسکرول عمودی */
-    border-width: 6px;
-  }
-
-  .main-grid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-    width: 100%;
-  }
-
-  .center-logo {
-    position: relative;
-    top: 0;
-    left: 0;
-    transform: none;
-    width: 140px;
-    height: auto;
-    margin-bottom: 12px;
-  }
-
-  .half-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    justify-items: center;
-    width: 100%;
-  }
-
-  /* اگر بخوای هر دسته تکی زیر هم باشه (نه دوتا در عرض)، این رو فعال کن */
-  /* .half-grid {
-    grid-template-columns: 1fr;
-  } */
-
-  .img-container {
-    width: 140px;
-    height: 140px;
-  }
-
-  .img-text {
-    font-size: 0.9rem;
-  }
-
-  .allah-logo-left,
-  .allah-logo-right {
-    display: none;
-  }
-}
-
 </style>
