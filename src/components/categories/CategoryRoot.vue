@@ -1,208 +1,248 @@
 <template>
   <q-page class="bg-page">
-    <!-- لوگوی وسط -->
+    <!-- لوگوی اصلی -->
     <img class="center-logo" src="/src/assets/logo-main.png" alt="center logo" />
 
-    <!-- ساختار دو بخش چپ و راست -->
-    <div class="main-grid">
-      <!-- بخش چپ -->
-      <div class="half-grid left-grid">
-        <div
-          v-for="(cell, index) in cellLeft"
-          :key="'left-' + index"
-          class="img-wrapper"
-          ref="hexRefs"
-          @click="goToCategory(cell.category, index, false)"
-        >
-          <div class="img-container">
-            <img :src="cell.image" :alt="cell.text" class="category-img" />
-          </div>
-          <p class="img-text">{{ cell.text }}</p>
+    <!-- کانتینر آیکون‌ها -->
+    <div class="icons-container">
+      <div
+        v-for="(cell, index) in cells"
+        :key="index"
+        class="img-wrapper"
+        ref="hexRefs"
+        :style="{ top: cell.top, left: cell.left }"
+        @click="goToCategory(cell.category, index)"
+      >
+        <div class="img-container">
+          <img :src="cell.image" :alt="cell.text" class="category-img" />
         </div>
-      </div>
-
-      <!-- بخش راست -->
-      <div class="half-grid right-grid">
-        <div
-          v-for="(cell, index) in cellRight"
-          :key="'right-' + index"
-          class="img-wrapper"
-          ref="hexRefs"
-          @click="goToCategory(cell.category, index, true)"
-        >
-          <div class="img-container">
-            <img :src="cell.image" :alt="cell.text" class="category-img" />
-          </div>
-          <p class="img-text">{{ cell.text }}</p>
-        </div>
+        <p class="img-text">{{ cell.text }}</p>
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const router = useRouter();
 const hexRefs = ref([]);
+const cells = ref([]);
 
-const cellLeft = ref([
-  { text: "مالی", category: "mali", image: "/src/assets/mali.png" },
-  { text: "عمران", category: "omran", image: "/src/assets/omran.png" },
-  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png" },
-  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png" },
-  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png" },
-  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png" },
-]);
+/* ===== چیدمان دسکتاپ ===== */
+const desktopCells = [
+  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "35vh", left: "25vw" },
+  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "55vh", left: "15vw" },
+  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "35vh", left: "15vw" },
+  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "55vh", left: "25vw" },
+  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "35vh", left: "35vw" },
+  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "55vh", left: "35vw" },
+  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "35vh", left: "65vw" },
+  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "55vh", left: "65vw" },
+  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "35vh", left: "75vw" },
+  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "55vh", left: "75vw" },
+  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "35vh", left: "85vw" },
+  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "55vh", left: "85vw" },
+];
 
-const cellRight = ref([
-  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png" },
-  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png" },
-  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png" },
-  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png" },
-  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png" },
-  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png" },
-]);
+/* ===== چیدمان موبایل (چهار ردیف سه‌تایی) ===== */
+const mobileCells = [
+  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "28vh", left: "22vw" },
+  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "28vh", left: "50vw" },
+  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "28vh", left: "78vw" },
+  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "45vh", left: "22vw" },
+  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "45vh", left: "50vw" },
+  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "45vh", left: "78vw" },
+  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "62vh", left: "22vw" },
+  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "62vh", left: "50vw" },
+  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "62vh", left: "78vw" },
+  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "79vh", left: "22vw" },
+  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "79vh", left: "50vw" },
+  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "79vh", left: "78vw" },
+];
 
-// انیمیشن کلیک
-const goToCategory = (cat, index, isRight = false) => {
-  const actualIndex = isRight ? index + cellLeft.value.length : index;
-  const el = hexRefs.value[actualIndex];
+/* ===== رفتن به مسیر دسته‌بندی ===== */
+const goToCategory = (cat, index) => {
+  const el = hexRefs.value[index];
   if (!el) return;
 
   gsap.to(el, {
     opacity: 0,
-    scale: 1,
     rotate: 180,
+    scale: 0.9,
     duration: 0.5,
     ease: "power2.in",
-    onComplete: () => {
-      router.push({ name: "Categories", params: { pathMatch: cat } });
-    },
+    onComplete: () => router.push({ name: "Categories", params: { pathMatch: cat } }),
   });
 };
 
+/* ===== GSAP setup با ScrollTrigger.matchMedia ===== */
 onMounted(async () => {
   await nextTick();
 
-  // انیمیشن hover
-  hexRefs.value.forEach((el) => {
-    el.addEventListener("mouseenter", () => {
-      gsap.to(el, { scale: 1.05, duration: 0.3, ease: "power2.out" });
-    });
-    el.addEventListener("mouseleave", () => {
-      gsap.to(el, { scale: 1, duration: 0.3, ease: "power2.out" });
+  const ctx = gsap.context(() => {
+    ScrollTrigger.matchMedia({
+      /* ===== موبایل ===== */
+      "(max-width: 768px)": function () {
+        cells.value = mobileCells;
+
+        gsap.from(".center-logo", {
+          opacity: 0,
+          y: -20,
+          duration: 0.5
+        });
+
+        hexRefs.value.forEach((el) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 80%",
+              toggleActions: "play none none none"
+            },
+            opacity: 0,
+            y: 20,
+            scale: 0.9,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+
+          el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.06, duration: 0.25 }));
+          el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, duration: 0.25 }));
+        });
+      },
+
+      /* ===== دسکتاپ ===== */
+      "(min-width: 769px)": function () {
+        cells.value = desktopCells;
+
+        gsap.from(".center-logo", {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.8,
+          ease: "back.out(1.5)"
+        });
+
+        hexRefs.value.forEach((el) => {
+          gsap.from(el, {
+            opacity: 0,
+            scale: 0.9,
+            stagger: 0.08,
+            duration: 0.7,
+            ease: "power2.out"
+          });
+
+          el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.06, duration: 0.25 }));
+          el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, duration: 0.25 }));
+        });
+      }
     });
   });
 
-  // انیمیشن لوگو
-  gsap.from(".center-logo", {
-    opacity: 0,
-    scale: 0.7,
-    duration: 0.8,
-    ease: "back.out(1.7)",
-  });
-
-  // انیمیشن ورود آیتم‌ها
-  gsap.from(hexRefs.value, {
-    opacity: 0,
-    y: 40,
-    stagger: 0.05,
-    duration: 0.6,
-    ease: "power2.out",
-  });
+  onBeforeUnmount(() => ctx.revert());
 });
 </script>
 
 <style scoped>
-/* ===== پس‌زمینه ===== */
 .bg-page {
   position: relative;
   background: url('/src/assets/back ground.png') no-repeat center center fixed;
   background-size: cover;
-  height: 100vh;
   width: 100vw;
-  margin: 0;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+  min-height: 100vh;
   border: 14px solid transparent;
   border-image: linear-gradient(to bottom, #009639 0%, #ffffff 50%, #da0000 100%) 1;
   border-radius: 20px;
-}
-
-.bg-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.25) inset;
-  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .center-logo {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -30%);
+  transform: translate(-50%, -50%);
   width: 200px;
   height: auto;
-  z-index: 8;
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
-  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.25));
 }
 
-/* ===== ساختار کلی ===== */
-.main-grid {
-  display: flex;
-  width: 90%;
-  height: 60%;
-  justify-content: space-between;
-  align-items: center;
-  gap: 250px; /* کمتر شد برای سه‌تایی */
+.icons-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  z-index: 5;
 }
 
-/* ===== چیدمان هر نیمه ===== */
-.half-grid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ✅ سه‌تایی */
-  gap: 10px;
-  justify-items: center;
-  align-items: center;
-}
-
-/* ===== تصویر و متن ===== */
 .img-wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.3s ease;
 }
 
 .img-container {
-  width: 150px; /* کمی کوچک‌تر شد */
-  height: 150px;
-  overflow: hidden;
+  width: 140px;
+  height: 140px;
   border-radius: 16px;
+  overflow: hidden;
 }
 
 .category-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 1s ease;
 }
 
 .img-text {
-  color: black;
+  color: #000;
   text-align: center;
-  margin-top: 4px;
-  font-size: 1.3rem;
   font-weight: 600;
+  font-size: 1.2rem;
+  margin-top: 6px;
+}
+
+/* ==== موبایل ==== */
+@media (max-width: 768px) {
+  .bg-page {
+    overflow-y: auto; /* فعال کردن اسکرول */
+    height: 100vh;
+    padding: 0 10px;
+  }
+
+  .center-logo {
+    position: relative;
+    top: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    margin-bottom: 4vh;
+  }
+
+  .icons-container {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .img-wrapper {
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+
+  .img-container {
+    width: 90px;
+    height: 90px;
+  }
+
+  .img-text {
+    font-size: 1rem;
+  }
 }
 </style>
