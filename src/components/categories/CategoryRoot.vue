@@ -35,34 +35,34 @@ const cells = ref([]);
 
 /* ===== چیدمان دسکتاپ ===== */
 const desktopCells = [
-  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "35vh", left: "25vw" },
-  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "55vh", left: "15vw" },
-  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "35vh", left: "15vw" },
-  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "55vh", left: "25vw" },
-  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "35vh", left: "35vw" },
-  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "55vh", left: "35vw" },
-  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "35vh", left: "65vw" },
-  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "55vh", left: "65vw" },
-  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "35vh", left: "75vw" },
-  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "55vh", left: "75vw" },
-  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "35vh", left: "85vw" },
-  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "55vh", left: "85vw" },
+  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "40vh", left: "22vw" },
+  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "60vh", left: "12vw" },
+  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "40vh", left: "12vw" },
+  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "60vh", left: "22vw" },
+  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "40vh", left: "32vw" },
+  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "60vh", left: "32vw" },
+  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "40vh", left: "65vw" },
+  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "60vh", left: "65vw" },
+  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "40vh", left: "75vw" },
+  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "60vh", left: "75vw" },
+  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "40vh", left: "85vw" },
+  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "60vh", left: "85vw" },
 ];
 
-/* ===== چیدمان موبایل (چهار ردیف سه‌تایی) ===== */
+/* ===== چیدمان موبایل ===== */
 const mobileCells = [
-  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "28vh", left: "22vw" },
-  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "28vh", left: "50vw" },
-  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "28vh", left: "78vw" },
-  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "45vh", left: "22vw" },
-  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "45vh", left: "50vw" },
-  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "45vh", left: "78vw" },
-  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "62vh", left: "22vw" },
-  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "62vh", left: "50vw" },
-  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "62vh", left: "78vw" },
-  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "79vh", left: "22vw" },
-  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "79vh", left: "50vw" },
-  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "79vh", left: "78vw" },
+  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "10vh", left: "18vw" },
+  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "10vh", left: "46vw" },
+  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "10vh", left: "74vw" },
+  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "27vh", left: "18vw" },
+  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "27vh", left: "46vw" },
+  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "27vh", left: "74vw" },
+  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "44vh", left: "18vw" },
+  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "44vh", left: "46vw" },
+  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "44vh", left: "74vw" },
+  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "61vh", left: "18vw" },
+  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "61vh", left: "46vw" },
+  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "61vh", left: "74vw" },
 ];
 
 /* ===== رفتن به مسیر دسته‌بندی ===== */
@@ -90,19 +90,11 @@ onMounted(async () => {
       "(max-width: 768px)": function () {
         cells.value = mobileCells;
 
-        gsap.from(".center-logo", {
-          opacity: 0,
-          y: -20,
-          duration: 0.5
-        });
+        gsap.from(".center-logo", { opacity: 0, y: -20, duration: 0.5 });
 
         hexRefs.value.forEach((el) => {
           gsap.from(el, {
-            scrollTrigger: {
-              trigger: el,
-              start: "top 80%",
-              toggleActions: "play none none none"
-            },
+            scrollTrigger: { trigger: el, start: "top 80%", toggleActions: "play none none none" },
             opacity: 0,
             y: 20,
             scale: 0.9,
@@ -113,6 +105,24 @@ onMounted(async () => {
           el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.06, duration: 0.25 }));
           el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, duration: 0.25 }));
         });
+
+        // ✅ کنترل اسکرول با فاصله 250px از پایین صفحه
+        const pageEl = document.querySelector(".bg-page");
+        const contentEl = document.querySelector(".icons-container");
+
+        const checkOverflow = () => {
+          const minGap = 250; // اگر کمتر از این فاصله با انتهای صفحه داشت، اسکرول فعال شود
+          const diff = window.innerHeight - contentEl.scrollHeight;
+
+          if (diff < minGap) {
+            pageEl.style.overflowY = "auto";
+          } else {
+            pageEl.style.overflowY = "hidden";
+          }
+        };
+
+        checkOverflow();
+        window.addEventListener("resize", checkOverflow);
       },
 
       /* ===== دسکتاپ ===== */
@@ -151,8 +161,8 @@ onMounted(async () => {
   position: relative;
   background: url('/src/assets/back ground.png') no-repeat center center fixed;
   background-size: cover;
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100%;
   border: 14px solid transparent;
   border-image: linear-gradient(to bottom, #009639 0%, #ffffff 50%, #da0000 100%) 1;
   border-radius: 20px;
@@ -162,10 +172,9 @@ onMounted(async () => {
 
 .center-logo {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
+  top: calc(50% - 75px);
+  left: calc(50% - 75px);
+  width: 150px;
   height: auto;
   z-index: 10;
   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.25));
@@ -211,7 +220,7 @@ onMounted(async () => {
 /* ==== موبایل ==== */
 @media (max-width: 768px) {
   .bg-page {
-    overflow-y: auto; /* فعال کردن اسکرول */
+    overflow-y: hidden;
     height: 100vh;
     padding: 0 10px;
   }
@@ -221,7 +230,7 @@ onMounted(async () => {
     top: 5vh;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
+    width: 90px;
     margin-bottom: 4vh;
   }
 
