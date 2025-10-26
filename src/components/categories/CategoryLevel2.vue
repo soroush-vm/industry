@@ -1,26 +1,33 @@
 <template>
   <q-page class="bg-page flex flex-center">
 
+    <!-- نوار breadcrumb سراسری -->
+    <div class="breadcrumb-bar" ref="breadcrumbRef">
+      <div class="breadcrumb">
+        <span
+          v-for="(seg, i) in segments"
+          :key="i"
+          class="crumb"
+        >
+          {{ seg }}
+          <span v-if="i < segments.length - 1" class="arrow">→</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="barInfo-info" ref="barInfoRef">
+      <div class="barInfo">
+        اطلاعات بیشتر درباره {{ segments[1] }}
+      </div>
+    </div>
+
     <!-- دکمه بازگشت -->
     <q-btn
-      label="بازگشت 🔙"
+      label="بازگشت"
       color="amber"
       class="back-btn"
       @click="goBack"
     />
-
-    <!-- مسیر فعلی -->
-    <div class="breadcrumb" ref="breadcrumbRef">
-      <span
-        v-for="(seg, i) in segments"
-        :key="i"
-        class="crumb"
-      >
-        {{ seg }}
-        <span v-if="i < segments.length - 1" class="arrow">→</span>
-      </span>
-    </div>
-
 
     <!-- نود مرکزی -->
     <div class="center-node" ref="centerRef">
@@ -40,6 +47,7 @@
     >
       {{ sub }}
     </div>
+
   </q-page>
 </template>
 
@@ -56,12 +64,12 @@ const nodeRefs = ref([]);
 const centerRef = ref(null);
 const centerImg = ref(null);
 const breadcrumbRef = ref(null);
+const barInfoRef = ref(null);
 
 
 const subCategories = ["الف", "ب", "پ", "ت", "ث", "ج", "چ", "ح"];
-const radius = 300;
+const radius = 200;
 
-// موقعیت دایره‌ای
 const getNodeStyle = (i, total) => {
   const angle = (i / total) * 2 * Math.PI;
   const x = Math.cos(angle) * radius;
@@ -69,87 +77,60 @@ const getNodeStyle = (i, total) => {
   return { "--node-translate": `translate(${x}px, ${y}px)` };
 };
 
-// هاور
-const hoverIn = (i) => {
-  gsap.to(nodeRefs.value[i], { scale: 1.25, duration: 0.25, ease: "power2.out" });
-};
-const hoverOut = (i) => {
-  gsap.to(nodeRefs.value[i], { scale: 1, duration: 0.25, ease: "power2.out" });
-};
+const hoverIn = (i) => gsap.to(nodeRefs.value[i], { scale: 1.25, duration: 0.25 });
+const hoverOut = (i) => gsap.to(nodeRefs.value[i], { scale: 1, duration: 0.25 });
 
-// انیمیشن ورود
 onMounted(async () => {
   await nextTick();
+
   gsap.fromTo(centerImg.value,
-  { scale: 0, opacity: 0, rotation: -180 },
-  { scale: 1, opacity: 1, rotation: 0, duration: 1, ease: "elastic.out(1, 0.6)" }
+    { scale: 0, opacity: 0, rotation: -180 },
+    { scale: 1, opacity: 1, rotation: 0, duration: 1, ease: "elastic.out(1, 0.6)" }
   );
 
-  // gsap.fromTo(centerRef.value,
-  //   { scale: 0, opacity: 0, y: -100 },
-  //   { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: "elastic.out(1, 0.6)" }
-  // );
-  gsap.to(centerImg.value, {
-    scale: 1.1,
-    repeat: -1,
-    yoyo: true,
-    duration: 1.5,
-    ease: "sine.inOut"
-  });
+  gsap.to(centerImg.value, { scale: 1.1, repeat: -1, yoyo: true, duration: 1.5 });
 
   gsap.fromTo(nodeRefs.value,
     { scale: 0, opacity: 0, rotation: 180 },
-    {
-      scale: 1,
-      opacity: 1,
-      rotation: 0,
-      duration: 0.8,
-      stagger: 0.12,
-      ease: "back.out(1.8)",
-    }
+    { scale: 1, opacity: 1, rotation: 0, duration: 0.8, stagger: 0.12, ease: "back.out(1.8)" }
   );
-  // انیمیشن ورود breadcrumb
+
   gsap.fromTo(breadcrumbRef.value,
-    { opacity: 0, y: -30, scale: 0.8 },
-    { opacity: 1, y: 0, scale: 1, duration: 1, ease: "back.out(1.7)" }
+    { opacity: 0, y: -30 },
+    { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" }
+  );
+
+  gsap.fromTo(barInfoRef.value,
+    { opacity: 0, y: -30 },
+    { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" }
   );
 
   gsap.fromTo(".crumb",
     { opacity: 0, x: 30 },
     { opacity: 1, x: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }
   );
-
 });
 
-// کلیک روی نود → مرحله بعد
 const onNodeClick = (sub) => {
   const tl = gsap.timeline({
-    onComplete: () => {
-      router.push({
-        name: "Categories",
-        params: { pathMatch: [segments[0], segments[1], sub] },
-      });
-    },
+    onComplete: () => router.push({
+      name: "Categories",
+      params: { pathMatch: [segments[0], segments[1], sub] },
+    }),
   });
-
   animateExit(tl);
 };
 
-// دکمه بازگشت → مرحله قبل
 const goBack = () => {
   const tl = gsap.timeline({
-    onComplete: () => {
-      router.push({
-        name: "Categories",
-        params: { pathMatch: [segments[0]] },
-      });
-    },
+    onComplete: () => router.push({
+      name: "Categories",
+      params: { pathMatch: [segments[0]] },
+    }),
   });
-
   animateExit(tl);
 };
 
-// تابع مشترک انیمیشن خروج
 const animateExit = (tl) => {
   nodeRefs.value.forEach((node, i) => {
     const angle = (i / nodeRefs.value.length) * Math.PI * 2;
@@ -190,40 +171,112 @@ const animateExit = (tl) => {
   overflow: hidden;
 }
 
+/* breadcrumb bar جدید */
+/* .breadcrumb-bar {
+  position: absolute;
+  top: 10vh;
+  width: 100vw;
+  display: flex;
+  background-color: rgba(133, 35, 224, 0.4);
+  justify-content: right;
+  z-index: 60;
+} */
+ 
+/* ✅ نوار breadcrumb */
+.breadcrumb-bar {
+  position: absolute;
+  top: 18vh;
+  width: 50vw;
+  right: 0px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 8px 20px;
+  z-index: 100;
+  font-size: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: right;
+}
+
+.barInfo-info {
+  position: absolute;
+  top: 8vh;
+  width: 100vw;
+  display: flex;
+  height: 8vh;
+  background-color: rgba(133, 35, 224, 0.4);
+  justify-content: right;
+  z-index: 60;
+}
+
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  gap: 6px;
+  background: rgba(29, 3, 3, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  padding: 6px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.barInfo {
+  display: flex;
+  align-items: center;
+  justify-items: left;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  gap: 6px;
+  background: rgba(29, 3, 3, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  padding: 6px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+
+.crumb {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.arrow {
+  margin: 0 6px;
+  color: #ffb300;
+  font-weight: bold;
+}
+
 .back-btn {
   position: absolute;
-  top: 30px;
-  left: 30px;
+  top: 90vh;
+  left: 4vw;
+
+  font-style: bold;
   z-index: 50;
 }
 
-/* .center-node {
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-  background: #ffb300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  text-align: center;
-  color: #222;
-  box-shadow: 0 0 14px rgba(255, 179, 0, 0.4);
-  padding: 10px;
-  z-index: 10;
-} */
-
 .center-node {
   position: absolute;
+  margin-top: 17vh;
   width: 140px;
   height: 140px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%; /* اگه بخوای دایره بشه */
+  border-radius: 50%;
   overflow: hidden;
-  background: transparent; /* چون حالا از تصویر استفاده می‌کنی */
+  background: transparent;
   box-shadow: 0 0 14px rgba(255, 179, 0, 0.4);
 }
 
@@ -247,43 +300,12 @@ const animateExit = (tl) => {
   color: white;
   text-align: center;
   padding: 8px;
+  margin-top: 17vh;
   cursor: pointer;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   transform: var(--node-translate) scale(1);
   transition: box-shadow 0.3s ease;
 }
-
-.breadcrumb {
-  position: absolute;
-  top: 25px;
-  right: 40px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border-radius: 999px;
-  padding: 6px 16px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
-  overflow: hidden;
-  z-index: 60;
-}
-
-.crumb {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.arrow {
-  margin: 0 6px;
-  color: #ffb300;
-  font-weight: bold;
-}
-
 
 .node:hover {
   box-shadow: 0 0 16px rgba(103, 58, 183, 0.9);

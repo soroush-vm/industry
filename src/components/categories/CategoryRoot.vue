@@ -35,18 +35,18 @@ const cells = ref([]);
 
 /* ===== چیدمان دسکتاپ ===== */
 const desktopCells = [
-  { text: "مالی", category: "mali", image: "/src/assets/mali.png", top: "40vh", left: "22vw" },
-  { text: "عمران", category: "omran", image: "/src/assets/omran.png", top: "60vh", left: "12vw" },
-  { text: "سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "40vh", left: "12vw" },
-  { text: "صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "60vh", left: "22vw" },
-  { text: "معادن", category: "maaden", image: "/src/assets/maaden.png", top: "40vh", left: "32vw" },
-  { text: "تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "60vh", left: "32vw" },
-  { text: "کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "40vh", left: "65vw" },
-  { text: "حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "60vh", left: "65vw" },
-  { text: "گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "40vh", left: "75vw" },
-  { text: "فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "60vh", left: "75vw" },
-  { text: "اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "40vh", left: "85vw" },
-  { text: "آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "60vh", left: "85vw" },
+  { text: "سامانه جامع مالی", category: "mali", image: "/src/assets/mali.png", top: "40vh", left: "22vw" },
+  { text: "سامانه جامع عمران", category: "omran", image: "/src/assets/omran.png", top: "70vh", left: "12vw" },
+  { text: "سامانه جامع سلامت", category: "salamat", image: "/src/assets/salamat.png", top: "40vh", left: "12vw" },
+  { text: "سامانه جامع صنایع", category: "sanaye", image: "/src/assets/sanaye.png", top: "70vh", left: "22vw" },
+  { text: "سامانه جامع معادن", category: "maaden", image: "/src/assets/maaden.png", top: "40vh", left: "32vw" },
+  { text: "سامانه جامع تجارت", category: "tejarat", image: "/src/assets/tejarat.png", top: "70vh", left: "32vw" },
+  { text: "سامانه جامع کشاورزی", category: "keshavarzi", image: "/src/assets/keshavarzi.png", top: "40vh", left: "65vw" },
+  { text: "سامانه جامع حمل و نقل", category: "hamlonaghl", image: "/src/assets/hamlnaghl.png", top: "70vh", left: "65vw" },
+  { text: "سامانه جامع گردشگری", category: "gardeshgari", image: "/src/assets/gardeshgari.png", top: "40vh", left: "75vw" },
+  { text: "سامانه جامع فناوری", category: "fanavari", image: "/src/assets/fanavari.png", top: "70vh", left: "75vw" },
+  { text: "سامانه جامع اصناف", category: "asnaf", image: "/src/assets/asnaf.png", top: "40vh", left: "85vw" },
+  { text: "سامانه جامع آموزش", category: "amozesh", image: "/src/assets/amozesh.png", top: "70vh", left: "85vw" },
 ];
 
 /* ===== چیدمان موبایل ===== */
@@ -172,9 +172,9 @@ onMounted(async () => {
 
 .center-logo {
   position: absolute;
-  top: calc(50% - 75px);
-  left: calc(50% - 75px);
-  width: 150px;
+  top: calc(50% - 150px);
+  left: calc(50% - 160px);
+  width: 300px;
   height: auto;
   z-index: 10;
   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.25));
@@ -197,8 +197,8 @@ onMounted(async () => {
 }
 
 .img-container {
-  width: 140px;
-  height: 140px;
+  width: 240px;
+  height: 240px;
   border-radius: 16px;
   overflow: hidden;
 }
@@ -213,7 +213,7 @@ onMounted(async () => {
   color: #000;
   text-align: center;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-top: 6px;
 }
 
@@ -246,12 +246,12 @@ onMounted(async () => {
   }
 
   .img-container {
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
   }
 
   .img-text {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 }
 </style>
