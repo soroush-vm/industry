@@ -102,27 +102,8 @@ onMounted(async () => {
             ease: "power2.out"
           });
 
-          el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.06, duration: 0.25 }));
-          el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, duration: 0.25 }));
+          // برای موبایل از هاور استفاده نمی‌کنیم، چون در دستگاه‌های لمسی معنی ندارد
         });
-
-        // ✅ کنترل اسکرول با فاصله 250px از پایین صفحه
-        const pageEl = document.querySelector(".bg-page");
-        const contentEl = document.querySelector(".icons-container");
-
-        const checkOverflow = () => {
-          const minGap = 250; // اگر کمتر از این فاصله با انتهای صفحه داشت، اسکرول فعال شود
-          const diff = window.innerHeight - contentEl.scrollHeight;
-
-          if (diff < minGap) {
-            pageEl.style.overflowY = "auto";
-          } else {
-            pageEl.style.overflowY = "hidden";
-          }
-        };
-
-        checkOverflow();
-        window.addEventListener("resize", checkOverflow);
       },
 
       /* ===== دسکتاپ ===== */
@@ -145,6 +126,7 @@ onMounted(async () => {
             ease: "power2.out"
           });
 
+          // اطمینان از عملکرد صحیح هاور
           el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.06, duration: 0.25 }));
           el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, duration: 0.25 }));
         });
@@ -220,7 +202,6 @@ onMounted(async () => {
 /* ==== موبایل ==== */
 @media (max-width: 768px) {
   .bg-page {
-    overflow-y: hidden;
     height: 100vh;
     padding: 0 10px;
   }

@@ -328,8 +328,8 @@ const animateExit = (tl) => {
 
 .center-node {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 220px;
   margin-top: 17vh;
   display: flex;
   justify-content: center;
