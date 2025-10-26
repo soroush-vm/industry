@@ -80,63 +80,161 @@ const goToCategory = (cat, index) => {
   });
 };
 
-/* ===== GSAP setup با ScrollTrigger.matchMedia ===== */
+/* ===== GSAP setup ===== */
 onMounted(async () => {
-  await nextTick();
+  const mm = gsap.matchMedia();
 
-  const ctx = gsap.context(() => {
-    ScrollTrigger.matchMedia({
-      /* ===== موبایل ===== */
-      "(max-width: 768px)": function () {
-        cells.value = mobileCells;
+  /* ==== موبایل ==== */
+  mm.add("(max-width: 768px)", async () => {
+    cells.value = mobileCells;
+    await nextTick(); // صبر برای ساخت DOM
 
-        gsap.from(".center-logo", { opacity: 0, y: -20, duration: 0.5 });
+    gsap.from(".center-logo", { opacity: 0, y: -20, duration: 0.5 });
 
-        hexRefs.value.forEach((el) => {
-          gsap.from(el, {
-            scrollTrigger: { trigger: el, start: "top 80%", toggleActions: "play none none none" },
-            opacity: 0,
-            y: 20,
-            scale: 0.9,
-            duration: 0.5,
-            ease: "power2.out"
-          });
-
-          // برای موبایل از هاور استفاده نمی‌کنیم، چون در دستگاه‌های لمسی معنی ندارد
-        });
-      },
-
-      /* ===== دسکتاپ ===== */
-      "(min-width: 769px)": function () {
-        cells.value = desktopCells;
-
-        gsap.from(".center-logo", {
-          opacity: 0,
-          scale: 0.8,
-          duration: 0.8,
-          ease: "back.out(1.5)"
-        });
-
-        hexRefs.value.forEach((el) => {
-          gsap.from(el, {
-            opacity: 0,
-            scale: 0.9,
-            stagger: 0.08,
-            duration: 0.7,
-            ease: "power2.out"
-          });
-
-          // اطمینان از عملکرد صحیح هاور
-          el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.06, duration: 0.25 }));
-          el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, duration: 0.25 }));
-        });
-      }
+    gsap.from(hexRefs.value, {
+      opacity: 0,
+      y: 20,
+      scale: 0.9,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: "power2.out"
     });
   });
 
-  onBeforeUnmount(() => ctx.revert());
+  /* ==== دسکتاپ ==== */
+  mm.add("(min-width: 769px)", async () => {
+    cells.value = desktopCells;
+    await nextTick(); // ✅ صبر تا hexRefs پر شود
+
+    gsap.from(".center-logo", {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.8,
+      ease: "back.out(1.5)"
+    });
+
+    gsap.from(hexRefs.value, {
+      opacity: 0,
+      scale: 0.9,
+      stagger: 0.08,
+      duration: 0.7,
+      ease: "power2.out"
+    });
+
+    // ✅ Hover Event بعد از ساخت کامل DOM
+    hexRefs.value.forEach((el) => {
+      el.addEventListener("mouseenter", () =>
+        gsap.to(el, { scale: 1.06, duration: 0.25 })
+      );
+      el.addEventListener("mouseleave", () =>
+        gsap.to(el, { scale: 1, duration: 0.25 })
+      );
+    });
+  });
+
+  onBeforeUnmount(() => mm.revert());
 });
 </script>
+<!-- 
+<style scoped>
+.bg-page {
+  position: relative;
+  background: url('/src/assets/back ground.png') no-repeat center center fixed;
+  background-size: cover;
+  width: 100vw;
+  min-height: 100vh;
+  border: 14px solid transparent;
+  border-image: linear-gradient(to bottom, #009639 0%, #ffffff 50%, #da0000 100%) 1;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.center-logo {
+  position: absolute;
+  top: calc(50% - 150px);
+  left: calc(50% - 160px);
+  width: 300px;
+  height: auto;
+  z-index: 10;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.25));
+}
+
+.icons-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+}
+
+.img-wrapper {
+  position: absolute;
+  top: 10vh;
+  left: 10vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.img-container {
+  width: 240px;
+  height: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.img-text {
+  color: #000;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin-top: 6px;
+}
+
+/* ==== موبایل ==== */
+@media (max-width: 768px) {
+  .bg-page {
+    height: 100vh;
+    padding: 0 10px;
+  }
+
+  .center-logo {
+    position: relative;
+    top: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    margin-bottom: 4vh;
+  }
+
+  .icons-container {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .img-wrapper {
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+
+  .img-container {
+    width: 120px;
+    height: 120px;
+  }
+
+  .img-text {
+    font-size: 1.5rem;
+  }
+}
+</style> -->
 
 <style scoped>
 .bg-page {
@@ -202,6 +300,7 @@ onMounted(async () => {
 /* ==== موبایل ==== */
 @media (max-width: 768px) {
   .bg-page {
+    overflow-y: hidden;
     height: 100vh;
     padding: 0 10px;
   }
